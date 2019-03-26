@@ -162,7 +162,7 @@ def get_feature_by_bag_tfidf():
     y=y1+y2
 
     CV = CountVectorizer(ngram_range=(2, 4), decode_error="ignore",max_features=max_features,
-                                       token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
+                                       analyzer='char',token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
     x=CV.fit_transform(x).toarray()
 
     transformer = TfidfTransformer(smooth_idf=False)
@@ -196,7 +196,7 @@ def get_feature_by_opcode():
     y=y1+y2
 
     CV = CountVectorizer(ngram_range=(2, 4), decode_error="ignore",max_features=max_features,
-                                       token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
+                                       analyzer='char',token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
 
     x=CV.fit_transform(x).toarray()
 
@@ -286,7 +286,7 @@ def check_webshell(clf,dir):
 
     webshell_files_list = load_files_re(webshell_dir)
     CV = CountVectorizer(ngram_range=(3, 3), decode_error="ignore", max_features=max_features,
-                         token_pattern=r'\b\w+\b', min_df=1, max_df=1.0)
+                         analyzer='char',token_pattern=r'\b\w+\b', min_df=1, max_df=1.0)
     x = CV.fit_transform(webshell_files_list).toarray()
 
     transformer = TfidfTransformer(smooth_idf=False)
