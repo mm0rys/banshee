@@ -491,13 +491,13 @@ if __name__ == '__main__':
     print "load %d white %d black" % (white_count, black_count)
     do_xgboost(x, y)
 
-    print "xgboost and opcode and 4-gram"
-    max_features=10000
-    max_document_length=4000
-    print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
-    x, y = get_feature_by_opcode()
-    print "load %d white %d black" % (white_count, black_count)
-    do_xgboost(x, y)
+    #print "xgboost and opcode and 4-gram"
+    #max_features=10000
+    #max_document_length=4000
+    #print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
+    #x, y = get_feature_by_opcode()
+    #print "load %d white %d black" % (white_count, black_count)
+    #do_xgboost(x, y)
 
 
     print "xgboost and wordbag and 2-gram"
