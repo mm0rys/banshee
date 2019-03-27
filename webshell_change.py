@@ -490,6 +490,7 @@ if __name__ == '__main__':
     x, y = get_feature_by_bag_tfidf()
     print "load %d white %d black" % (white_count, black_count)
     do_xgboost(x, y)
+    do_cnn(x, y)
 
     #print "xgboost and opcode and 4-gram"
     #max_features=10000
@@ -507,4 +508,5 @@ if __name__ == '__main__':
     x, y = get_feature_by_bag_tfidf()
     print "load %d white %d black" % (white_count, black_count)
     do_xgboost(x, y)
+    do_cnn(x, y)
 
