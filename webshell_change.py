@@ -395,7 +395,7 @@ def do_cnn(x,y):
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=5, shuffle=True, validation_set=0.1,
+                  n_epoch=10, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
     #    model.save(pkl_file)
     #else:
