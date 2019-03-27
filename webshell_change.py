@@ -464,12 +464,12 @@ def do_rf(x,y):
 
 if __name__ == '__main__':
     #x, y = get_feature_by_opcode_tf()
-    #x,y=get_feature_by_bag_tfidf()
+    x,y=get_feature_by_bag_tfidf()
     #x, y = get_feature_by_opcode()
-    #print "load %d white %d black" % ( white_count,black_count )
+    print "load %d white %d black" % ( white_count,black_count )
 
     #mlp
-    #do_mlp(x,y)
+    do_mlp(x,y)
     #nb
     #do_nb(x,y)
     #do_rf(x,y)
@@ -479,18 +479,18 @@ if __name__ == '__main__':
 
     #x,y=get_features_by_tf()
 
-    #do_cnn(x,y)
+    do_cnn(x,y)
     #do_rnn(x,y)
 
 
 
-    print "xgboost and bag and 2-gram"
-    max_features=5000
-    print "max_features=%d" % max_features
-    x, y = get_feature_by_bag_tfidf()
-    print "load %d white %d black" % (white_count, black_count)
-    do_xgboost(x, y)
-    do_cnn(x, y)
+    #print "xgboost and bag and 2-gram"
+    #max_features=5000
+    #print "max_features=%d" % max_features
+    #x, y = get_feature_by_bag_tfidf()
+    #print "load %d white %d black" % (white_count, black_count)
+    #do_xgboost(x, y)
+    #do_cnn(x, y)
 
     #print "xgboost and opcode and 4-gram"
     #max_features=10000
@@ -501,12 +501,12 @@ if __name__ == '__main__':
     #do_xgboost(x, y)
 
 
-    print "xgboost and wordbag and 2-gram"
-    max_features=10000
-    max_document_length=4000
-    print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
-    x, y = get_feature_by_bag_tfidf()
-    print "load %d white %d black" % (white_count, black_count)
-    do_xgboost(x, y)
-    do_mlp(x, y)
+    #print "xgboost and wordbag and 2-gram"
+    #max_features=10000
+   # max_document_length=4000
+ #   print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
+ #   x, y = get_feature_by_bag_tfidf()
+  #  print "load %d white %d black" % (white_count, black_count)
+  ##  do_xgboost(x, y)
+   # do_mlp(x, y)
 
