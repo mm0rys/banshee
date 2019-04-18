@@ -380,9 +380,9 @@ def do_cnn(x,y):
     # Building convolutional network
     network = input_data(shape=[None,max_document_length], name='input')
     network = tflearn.embedding(network, input_dim=1000000, output_dim=128)
-    branch1 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer="L2")
-    branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
-    branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
+    branch1 = conv_1d(network, 128, 3, padding='valid', activation='tanh', regularizer="L2")
+    branch2 = conv_1d(network, 128, 4, padding='valid', activation='tanh', regularizer="L2")
+    branch3 = conv_1d(network, 128, 5, padding='valid', activation='tanh', regularizer="L2")
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
     network = tf.expand_dims(network, 2)
     network = global_max_pool(network)
@@ -395,11 +395,11 @@ def do_cnn(x,y):
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=10, shuffle=True, validation_set=0.1,
+                  n_epoch=15, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
-    #    model.save(pkl_file)
+    #model.save(pkl_file)
     #else:
-    #    model.load(pkl_file)
+    #model.load(pkl_file)
 
     y_predict_list=model.predict(testX)
     #y_predict = list(model.predict(testX,as_iterable=True))
