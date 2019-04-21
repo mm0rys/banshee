@@ -463,7 +463,7 @@ def do_rf(x,y):
 
 if __name__ == '__main__':
     #x, y = get_feature_by_opcode_tf()
-    #x,y=get_feature_by_bag_tfidf()
+    x,y=get_feature_by_bag_tfidf()
     #x, y = get_feature_by_opcode()
     print "load %d white %d black" % ( white_count,black_count )
 
