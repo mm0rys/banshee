@@ -3,9 +3,9 @@ import re
 from sklearn.feature_extraction.text import CountVectorizer
 import sys
 import numpy as np
-from sklearn import cross_validation
+#from sklearn import cross_validation
 from sklearn.naive_bayes import GaussianNB
-from sklearn.cross_validation import train_test_split
+#from sklearn.cross_validation import train_test_split
 from sklearn import metrics
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.neural_network import MLPClassifier
