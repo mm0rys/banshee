@@ -467,20 +467,23 @@ if __name__ == '__main__':
     x,y=get_feature_by_bag_tfidf()
     #x, y = get_feature_by_opcode()
     print "load %d white %d black" % ( white_count,black_count )
-
+    
     #mlp
+    print "This is MLP:\r"
     do_mlp(x,y)
     #nb
-    do_nb(x,y)
-    do_rf(x,y)
+    #do_nb(x,y)
+    #do_rf(x,y)
     #svm
+    print "This is SVM:\r"
     do_svm(x,y)
-    do_check(x,y,clf)
+    #do_check(x,y,clf)
 
     x,y=get_features_by_tf()
-
+    print "This is CNN:\r"
     do_cnn(x,y)
     #do_rnn(x,y)
+
 
 
 
