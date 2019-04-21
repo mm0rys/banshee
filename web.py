@@ -467,12 +467,12 @@ if __name__ == '__main__':
     #x, y = get_feature_by_opcode()
     print "load %d white %d black" % ( white_count,black_count )
 
-    mlp
+    #mlp
     do_mlp(x,y)
-    nb
+    #nb
     do_nb(x,y)
     do_rf(x,y)
-    svm
+    #svm
     do_svm(x,y)
     do_check(x,y,clf)
 
