@@ -388,14 +388,14 @@ def do_cnn(x,y):
     network = global_max_pool(network)
     network = dropout(network, 0.8)
     network = fully_connected(network, 2, activation='softmax')
-    network = regression(network, optimizer='adam', learning_rate=0.001,
+    network = regression(network, optimizer='adam', learning_rate=0.0004,
                          loss='categorical_crossentropy', name='target')
 
     model = tflearn.DNN(network, tensorboard_verbose=0)
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=5, shuffle=True, validation_set=0.1,
+                  n_epoch=30, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
     #    model.save(pkl_file)
     #else:
@@ -469,14 +469,14 @@ if __name__ == '__main__':
     print "load %d white %d black" % ( white_count,black_count )
     
     #mlp
-    print "This is MLP:\r"
-    do_mlp(x,y)
+    #print "This is MLP:\r"
+    #do_mlp(x,y)
     #nb
     #do_nb(x,y)
     #do_rf(x,y)
     #svm
-    print "This is SVM:\r"
-    do_svm(x,y)
+    #print "This is SVM:\r"
+    #do_svm(x,y)
     #do_check(x,y,clf)
 
     x,y=get_features_by_tf()
