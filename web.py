@@ -399,7 +399,7 @@ def do_cnn(x,y):
     model.fit(trainX, trainY,
                   n_epoch=30, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
-    #    model.save(pkl_file)
+    model.save(pkl_file)
     #else:
     #    model.load(pkl_file)
 
@@ -489,12 +489,12 @@ if __name__ == '__main__':
 
 
 
-    print "xgboost and bag and 2-gram"
-    max_features=5000
+    #print "xgboost and bag and 2-gram"
+    #max_features=5000
     print "max_features=%d" % max_features
-    x, y = get_feature_by_bag_tfidf()
+    #x, y = get_feature_by_bag_tfidf()
     print "load %d white %d black" % (white_count, black_count)
-    do_xgboost(x, y)
+    #do_xgboost(x, y)
 
     #print "xgboost and opcode and 4-gram"
     #max_features=10000
@@ -505,10 +505,10 @@ if __name__ == '__main__':
     #do_xgboost(x, y)
 
 
-    print "xgboost and wordbag and 2-gram"
-    max_features=10000
-    max_document_length=4000
-    print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
-    x, y = get_feature_by_bag_tfidf()
-    print "load %d white %d black" % (white_count, black_count)
-    do_xgboost(x, y)
+    #print "xgboost and wordbag and 2-gram"
+    #max_features=10000
+   # max_document_length=4000
+    #print "max_features=%d max_document_length=%d" % (max_features,max_document_length)
+    #x, y = get_feature_by_bag_tfidf()
+   # print "load %d white %d black" % (white_count, black_count)
+    #do_xgboost(x, y)
