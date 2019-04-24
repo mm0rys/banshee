@@ -387,10 +387,10 @@ def do_cnn(x,y):
     network = tf.expand_dims(network, 2)
     network = global_max_pool(network)
     network = dropout(network, 0.8)
-    network = fully_connected(network, 2, activation='softmax')
     network2 = network
     network_concat = merge([network,network2], mode='concat', axis=1)
-    network = regression(network_concat, optimizer='adam', learning_rate=0.0004,
+    network = fully_connected(network_concat, 2, activation='softmax')
+    network = regression(network, optimizer='adam', learning_rate=0.0004,
                          loss='categorical_crossentropy', name='target')
 
     model = tflearn.DNN(network, tensorboard_verbose=0)
