@@ -469,17 +469,20 @@ if __name__ == '__main__':
     print "load %d white %d black" % ( white_count,black_count )
 
     #mlp
+    print "mlp:"
     do_mlp(x,y)
     #nb
-    #do_nb(x,y)
+    print "nb:"
+    do_nb(x,y)
     #do_rf(x,y)
     #svm
-    #do_svm(x,y)
+    print "svm:"
+    do_svm(x,y)
     #do_check(x,y,clf)
 
     #x,y=get_features_by_tf()
 
-    do_cnn(x,y)
+    #do_cnn(x,y)
     #do_rnn(x,y)
 
 
