@@ -393,7 +393,7 @@ def do_cnn(x,y):
     network = regression(network, optimizer='adam', learning_rate=0.0004,
                          loss='categorical_crossentropy', name='target')
 
-    model = tflearn.DNN(network, tensorboard_verbose=0)
+    model = tflearn.DNN(network, tensorboard_verbose=3)
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
@@ -481,8 +481,8 @@ if __name__ == '__main__':
     #do_svm(x,y)
     #do_check(x,y,clf)
 
-    x,y=get_features_by_tf()
-    print "This is CNN:\r"
+    #x,y=get_features_by_tf()
+    #print "This is CNN:\r"
     do_cnn(x,y)
     #do_rnn(x,y)
 
@@ -491,9 +491,9 @@ if __name__ == '__main__':
 
     #print "xgboost and bag and 2-gram"
     #max_features=5000
-    print "max_features=%d" % max_features
-    #x, y = get_feature_by_bag_tfidf()
-    print "load %d white %d black" % (white_count, black_count)
+    #print "max_features=%d" % max_features
+    ##x, y = get_feature_by_bag_tfidf()
+    #print "load %d white %d black" % (white_count, black_count)
     #do_xgboost(x, y)
 
     #print "xgboost and opcode and 4-gram"
