@@ -381,23 +381,24 @@ def do_cnn(x,y):
     network = input_data(shape=[None,max_document_length], name='input')
     network = tflearn.embedding(network, input_dim=1000000, output_dim=128)
     branch1 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer="L2")
+    print branch1
     branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
     branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
     network = tf.expand_dims(network, 2)
     network = global_max_pool(network)
-    network = dropout(network, 0.8)
+    network = dropout(network, 0.4)
     network2 = network
     network_concat = merge([network,network2], mode='concat', axis=1)
     network = fully_connected(network_concat, 2, activation='softmax')
-    network = regression(network, optimizer='adam', learning_rate=0.0004,
+    network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
 
     model = tflearn.DNN(network, tensorboard_verbose=3)
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=30, shuffle=True, validation_set=0.1,
+                  n_epoch=30, shuffle=True, validation_set=0.2,
                   show_metric=True, batch_size=100,run_id="webshell")
     model.save(pkl_file)
     #else:
