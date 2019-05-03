@@ -377,19 +377,28 @@ def do_cnn(x,y):
     trainY = to_categorical(trainY, nb_classes=2)
     testY = to_categorical(testY, nb_classes=2)
 
-    # Building convolutional network
+    # Building 1st convolutional network
     network = input_data(shape=[None,max_document_length], name='input')
     network = tflearn.embedding(network, input_dim=1000000, output_dim=128)
     branch1 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer="L2")
-    print branch1
     branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
     branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
     network = tf.expand_dims(network, 2)
     network = global_max_pool(network)
     network = dropout(network, 0.4)
-    network2 = network
-    network_concat = merge([network,network2], mode='concat', axis=1)
+    # Building 2nd convolutional network
+    network2 = input_data(shape=[None,max_document_length],name='input')
+    network2 = tflearn.embedding(network2, input_dim=1000000, output_dim=128)
+    branch21 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer='L2')
+    branch22 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer='L2')
+    branch23 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer='L2')
+    network2 = merge([branch21, branch22, branch23], mode='concat', axis=1)
+    network2 = tf.expand_dims(network2, 2)
+    network2 = global_max_pool(network2)
+    network2 = dropout(network2, 0.8)
+    #to concat network1 and network2
+    network_concat = merge([network, network2)
     network = fully_connected(network_concat, 2, activation='softmax')
     network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
@@ -398,7 +407,7 @@ def do_cnn(x,y):
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=30, shuffle=True, validation_set=0.2,
+                  n_epoch=5, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
     model.save(pkl_file)
     #else:
