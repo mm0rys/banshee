@@ -400,7 +400,7 @@ def do_cnn(x,y):
     #to concat network1 and network2
     network_concat = merge([network, network2], mode='concat', axis=1)
     network = tf.expand_dims(network_concat, 2)
-    network = global_max_pooling(network)
+    network = global_max_pool(network)
     network = dropout(network, 0.4)
     network = fully_connected(network, 2, activation='softmax')
     network = regression(network, optimizer='adam', learning_rate=0.001,
