@@ -384,6 +384,7 @@ def do_cnn(x,y):
     branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
     branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
+    print network.shape
     #network = tf.expand_dims(network, 2)
     #etwork = global_max_pool(network)
     #network = dropout(network, 0.4)
