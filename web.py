@@ -399,6 +399,7 @@ def do_cnn(x,y):
     #network2 = dropout(network2, 0.8)
     #to concat network1 and network2
     network_concat = merge([network, network2], mode='concat', axis=1)
+    print network_concat.shape
     network = tf.expand_dims(network_concat, 2)
     network = global_max_pool(network)
     network = dropout(network, 0.4)
