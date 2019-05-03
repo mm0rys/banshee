@@ -388,14 +388,14 @@ def do_cnn(x,y):
     network = global_max_pool(network)
     network = dropout(network, 0.8)
     network = fully_connected(network, 2, activation='softmax')
-    network = regression(network, optimizer='adam', learning_rate=0.001,
+    network = regression(network, optimizer='adam', learning_rate=0.0008,
                          loss='categorical_crossentropy', name='target')
 
     model = tflearn.DNN(network, tensorboard_verbose=3)
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=5, shuffle=True, validation_set=0.1,
+                  n_epoch=10, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
     #    model.save(pkl_file)
     #else:
