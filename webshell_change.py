@@ -386,20 +386,20 @@ def do_cnn(x,y):
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
     network = tf.expand_dims(network, 2)
     network = global_max_pool(network)
-    network = dropout(network, 0.6)
+    network = dropout(network, 0.8)
     network = fully_connected(network, 2, activation='softmax')
     network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
 
-    model = tflearn.DNN(network, tensorboard_verbose=0)
+    model = tflearn.DNN(network, tensorboard_verbose=3)
     #if not os.path.exists(pkl_file):
         # Training
     model.fit(trainX, trainY,
-                  n_epoch=20, shuffle=True, validation_set=0.1,
+                  n_epoch=5, shuffle=True, validation_set=0.1,
                   show_metric=True, batch_size=100,run_id="webshell")
-    #model.save(pkl_file)
+    #    model.save(pkl_file)
     #else:
-    #model.load(pkl_file)
+    #    model.load(pkl_file)
 
     y_predict_list=model.predict(testX)
     #y_predict = list(model.predict(testX,as_iterable=True))
@@ -469,20 +469,20 @@ if __name__ == '__main__':
     print "load %d white %d black" % ( white_count,black_count )
 
     #mlp
-    print "mlp:"
-    do_mlp(x,y)
+    #print "mlp:"
+    #do_mlp(x,y)
     #nb
-    print "nb:"
-    do_nb(x,y)
+    #print "nb:"
+    #do_nb(x,y)
     #do_rf(x,y)
     #svm
-    print "svm:"
-    do_svm(x,y)
+    #print "svm:"
+    #do_svm(x,y)
     #do_check(x,y,clf)
 
     #x,y=get_features_by_tf()
 
-    #do_cnn(x,y)
+    do_cnn(x,y)
     #do_rnn(x,y)
 
 
