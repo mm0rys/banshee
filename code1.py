@@ -34,6 +34,274 @@ max_features=10000
 max_document_length=100
 min_opcode_count=2
 
+
+def load_files_re(dir):
+    files_list = []
+    g = os.walk(dir)
+    for path, d, filelist in g:
+        #print d;
+        for filename in filelist:
+            #print os.path.join(path, filename)
+            if filename.endswith('.php') or filename.endswith('.txt'):
+                fulepath = os.path.join(path, filename)
+                print "Load %s" % fulepath
+                t = load_file(fulepath)
+                files_list.append(t)
+
+    return files_list
+
+def load_files_opcode_re(dir):
+    global min_opcode_count
+    files_list = []
+    g = os.walk(dir)
+    for path, d, filelist in g:
+        #print d;
+        for filename in filelist:
+            #print os.path.join(path, filename)
+            if filename.endswith('.php') :
+                fulepath = os.path.join(path, filename)
+                print "Load %s opcode" % fulepath
+                t = load_file_opcode(fulepath)
+                if len(t) > min_opcode_count:
+                    files_list.append(t)
+                else:
+                    print "Load %s opcode failed" % fulepath
+                #print "Add opcode %s" % t
+
+    return files_list
+
+
+def load_file(file_path):
+    t=""
+    with open(file_path) as f:
+        for line in f:
+            line=line.strip('\n')
+            t+=line
+    return t
+
+def load_file_opcode(file_path):
+    global php_bin
+    t=""
+    cmd=php_bin+" -dvld.active=1 -dvld.execute=0 "+file_path
+    #print "exec "+cmd
+    status,output=commands.getstatusoutput(cmd)
+
+    t=output
+        #print t
+    tokens=re.findall(r'\s(\b[A-Z_]+\b)\s',output)
+    t=" ".join(tokens)
+
+    print "opcode count %d" % len(t)
+    return t
+
+
+
+def load_files(path):
+    files_list=[]
+    for r, d, files in os.walk(path):
+        for file in files:
+            if file.endswith('.php'):
+                file_path=path+file
+                print "Load %s" % file_path
+                t=load_file(file_path)
+                files_list.append(t)
+    return  files_list
+
+def get_feature_by_bag_tfidf():
+    global white_count
+    global black_count
+    global max_features
+    print "max_features=%d" % max_features
+    x=[]
+    y=[]
+
+    webshell_files_list = load_files_re(webshell_dir)
+    y1=[1]*len(webshell_files_list)
+    black_count=len(webshell_files_list)
+
+    wp_files_list =load_files_re(whitefile_dir)
+    y2=[0]*len(wp_files_list)
+
+    white_count=len(wp_files_list)
+
+
+    x=webshell_files_list+wp_files_list
+    y=y1+y2
+
+    CV = CountVectorizer(ngram_range=(2, 4), decode_error="ignore",max_features=max_features,
+                                       token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
+    x=CV.fit_transform(x).toarray()
+
+    transformer = TfidfTransformer(smooth_idf=False)
+    x_tfidf = transformer.fit_transform(x)
+    x = x_tfidf.toarray()
+
+    return x,y
+
+def get_feature_by_opcode():
+    global white_count
+    global black_count
+    global max_features
+    global webshell_dir
+    global whitefile_dir
+    print "max_features=%d webshell_dir=%s whitefile_dir=%s" % (max_features,webshell_dir,whitefile_dir)
+    x=[]
+    y=[]
+
+    webshell_files_list = load_files_opcode_re(webshell_dir)
+    y1=[1]*len(webshell_files_list)
+    black_count=len(webshell_files_list)
+
+    wp_files_list =load_files_opcode_re(whitefile_dir)
+    y2=[0]*len(wp_files_list)
+
+    white_count=len(wp_files_list)
+
+
+    x=webshell_files_list+wp_files_list
+    #print x
+    y=y1+y2
+
+    CV = CountVectorizer(ngram_range=(2, 4), decode_error="ignore",max_features=max_features,
+                                       token_pattern = r'\b\w+\b',min_df=1, max_df=1.0)
+
+    x=CV.fit_transform(x).toarray()
+
+    return x,y
+
+
+def get_feature_by_opcode_tf():
+    global white_count
+    global black_count
+    global max_document_length
+    x=[]
+    y=[]
+
+    if os.path.exists(data_pkl_file) and os.path.exists(label_pkl_file):
+        f = open(data_pkl_file, 'rb')
+        x = pickle.load(f)
+        f.close()
+        f = open(label_pkl_file, 'rb')
+        y = pickle.load(f)
+        f.close()
+    else:
+        webshell_files_list = load_files_opcode_re(webshell_dir)
+        y1=[1]*len(webshell_files_list)
+        black_count=len(webshell_files_list)
+
+        wp_files_list =load_files_opcode_re(whitefile_dir)
+        y2=[0]*len(wp_files_list)
+
+        white_count=len(wp_files_list)
+
+
+        x=webshell_files_list+wp_files_list
+        #print x
+        y=y1+y2
+
+        vp=tflearn.data_utils.VocabularyProcessor(max_document_length=max_document_length,
+                                                  min_frequency=0,
+                                                  vocabulary=None,
+                                                  tokenizer_fn=None)
+        x=vp.fit_transform(x, unused_y=None)
+        x=np.array(list(x))
+
+        f = open(data_pkl_file, 'wb')
+        pickle.dump(x, f)
+        f.close()
+        f = open(label_pkl_file, 'wb')
+        pickle.dump(y, f)
+        f.close()
+    #print x
+    #print y
+    return x,y
+
+
+
+def  get_features_by_tf():
+    global  max_document_length
+    global white_count
+    global black_count
+    x=[]
+    y=[]
+
+    webshell_files_list = load_files_re(webshell_dir)
+    y1=[1]*len(webshell_files_list)
+    black_count=len(webshell_files_list)
+
+    wp_files_list =load_files_re(whitefile_dir)
+    y2=[0]*len(wp_files_list)
+
+    white_count=len(wp_files_list)
+
+
+    x=webshell_files_list+wp_files_list
+    y=y1+y2
+
+    vp=tflearn.data_utils.VocabularyProcessor(max_document_length=max_document_length,
+                                              min_frequency=0,
+                                              vocabulary=None,
+                                              tokenizer_fn=None)
+    x=vp.fit_transform(x, unused_y=None)
+    x=np.array(list(x))
+    return x,y
+
+def check_webshell(clf,dir):
+    all=0
+    all_php=0
+    webshell=0
+
+    webshell_files_list = load_files_re(webshell_dir)
+    CV = CountVectorizer(ngram_range=(3, 3), decode_error="ignore", max_features=max_features,
+                         token_pattern=r'\b\w+\b', min_df=1, max_df=1.0)
+    x = CV.fit_transform(webshell_files_list).toarray()
+
+    transformer = TfidfTransformer(smooth_idf=False)
+    transformer.fit_transform(x)
+
+
+    g = os.walk(dir)
+    for path, d, filelist in g:
+        for filename in filelist:
+            fulepath=os.path.join(path, filename)
+            t = load_file(fulepath)
+            t_list=[]
+            t_list.append(t)
+            x2 = CV.transform(t_list).toarray()
+            x2 = transformer.transform(x2).toarray()
+            y_pred = clf.predict(x2)
+            all+=1
+            if filename.endswith('.php'):
+                all_php+=1
+            if y_pred[0] == 1:
+                print "%s is webshell" % fulepath
+                webshell+=1
+
+    print "Scan %d files(%d php files),%d files is webshell" %(all,all_php,webshell)
+
+
+def do_check(x,y,clf):
+    clf.fit(x, y)
+    print "check_webshell"
+    #check_webshell(clf,"../data/webshell/normal/php/")
+    #/Users/maidou/Downloads/webshell-master/php
+    check_webshell(clf,check_dir)
+
+
+
+def do_metrics(y_test,y_pred):
+    print "metrics.accuracy_score:"
+    print metrics.accuracy_score(y_test, y_pred)
+    print "metrics.confusion_matrix:"
+    print metrics.confusion_matrix(y_test, y_pred)
+    print "metrics.precision_score:"
+    print metrics.precision_score(y_test, y_pred)
+    print "metrics.recall_score:"
+    print metrics.recall_score(y_test, y_pred)
+    print "metrics.f1_score:"
+    print metrics.f1_score(y_test,y_pred)
+
+
 def do_cnn(x,y):
     global max_document_length
     print "CNN and tf"
@@ -53,12 +321,18 @@ def do_cnn(x,y):
     branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
     branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
     network = merge([branch1, branch2, branch3], mode='concat', axis=1)
+    print network.shape
     network = tf.expand_dims(network, 2)
+    print network.shape
     network = global_max_pool(network)
+    print network.shape
     network = dropout(network, 0.8)
+    print network.shape
     network2 = network
     network_concat = merge([network,network2], mode='concat', axis=1)
+    print network_concat.shape
     network = fully_connected(network_concat, 2, activation='softmax')
+    print network.shape
     network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
 
@@ -89,3 +363,25 @@ def do_cnn(x,y):
     #print  y_test
 
     do_metrics(y_test, y_predict)
+    
+if __name__ == '__main__':
+    #x, y = get_feature_by_opcode_tf()
+    x,y=get_feature_by_bag_tfidf()
+    #x, y = get_feature_by_opcode()
+    print "load %d white %d black" % ( white_count,black_count )
+
+    #mlp
+    #print "This is MLP:\r"
+    #do_mlp(x,y)
+    #nb
+    #do_nb(x,y)
+    #do_rf(x,y)
+    #svm
+    #print "This is SVM:\r"
+    #do_svm(x,y)
+    #do_check(x,y,clf)
+
+    #x,y=get_features_by_tf()
+    #print "This is CNN:\r"
+    do_cnn(x,y)
+    #do_rnn(x,y)
