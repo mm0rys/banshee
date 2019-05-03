@@ -390,9 +390,9 @@ def do_cnn(x,y):
     # Building 2nd convolutional network
     network2 = input_data(shape=[None,max_document_length],name='input')
     network2 = tflearn.embedding(network2, input_dim=1000000, output_dim=128)
-    branch21 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer='L2')
-    branch22 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer='L2')
-    branch23 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer='L2')
+    branch21 = conv_1d(network2, 128, 3, padding='valid', activation='relu', regularizer='L2')
+    branch22 = conv_1d(network2, 128, 4, padding='valid', activation='relu', regularizer='L2')
+    branch23 = conv_1d(network2, 128, 5, padding='valid', activation='relu', regularizer='L2')
     network2 = merge([branch21, branch22, branch23], mode='concat', axis=1)
     network2 = tf.expand_dims(network2, 2)
     network2 = global_max_pool(network2)
