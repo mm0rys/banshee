@@ -33,6 +33,25 @@ from sklearn import preprocessing
 max_features=10000
 max_document_length=100
 min_opcode_count=2
+#pro
+#webshell_dir="../data/webshell/b/"
+#whitefile_dir="../data/webshell/w/"
+webshell_dir="../data/webshell/webshell/PHP/"
+whitefile_dir="../data/webshell/normal/php/"
+#webshell_dir="../data/webshell/dev-b/"
+#whitefile_dir="../data/webshell/dev-w/"
+check_dir="../../../../../Downloads/php-exploit-scripts-master/"
+white_count=0
+black_count=0
+php_bin="/Users/liu.yan/Desktop/code/2book/opt/php/bin/php"
+#php_bin="/Users/maidou/Desktop/book/2book/2book/opt/php/bin/php"
+#php_bin=" /home/fuxi/dev/opt/php/bin/php"
+
+
+pkl_file="webshell-opcode-cnn.pkl"
+
+data_pkl_file="data-webshell-opcode-tf.pkl"
+label_pkl_file="label-webshell-opcode-tf.pkl"
 
 
 def load_files_re(dir):
