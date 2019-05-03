@@ -390,24 +390,22 @@ def do_cnn(x,y):
     network = dropout(network, 0.4)
     print network.shape
     # Building 2nd convolutional network
-    #network2 = input_data(shape=[None,max_document_length],name='input')
-    #network2 = tflearn.embedding(network2, input_dim=1000000, output_dim=128)
-    #branch21 = conv_1d(network2, 128, 3, padding='valid', activation='relu', regularizer='L2')
-    #branch22 = conv_1d(network2, 128, 4, padding='valid', activation='relu', regularizer='L2')
-    #branch23 = conv_1d(network2, 128, 5, padding='valid', activation='relu', regularizer='L2')
-    #network2 = merge([branch21, branch22, branch23], mode='concat', axis=1)
-    #network2 = tf.expand_dims(network2, 2)
-    #network2 = global_max_pool(network2)
-    #network2 = dropout(network2, 0.8)
+    branch21 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer='L2')
+    branch22 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer='L2')
+    branch23 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer='L2')
+    network2 = merge([branch21, branch22, branch23], mode='concat', axis=1)
+    network2 = tf.expand_dims(network2, 2)
+    network2 = global_max_pool(network2)
+    network2 = dropout(network2, 0.8)
     #print network2.shape
     #to concat network1 and network2
-    #network_concat = merge([network, network2], mode='concat', axis=1)
-    #print network_concat.shape
+    network_concat = merge([network, network2], mode='concat', axis=1)
+    print network_concat.shape
     #network = tf.expand_dims(network_concat, 2)
     #network = global_max_pool(network)
     #network = dropout(network, 0.4)
     #print network_concat.shape
-    network = fully_connected(network, 2, activation='softmax')
+    network = fully_connected(network_concat, 2, activation='softmax')
     print network.shape
     network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
