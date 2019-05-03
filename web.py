@@ -383,11 +383,11 @@ def do_cnn(x,y):
     branch1 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer="L2")
     branch2 = conv_1d(network, 128, 4, padding='valid', activation='relu', regularizer="L2")
     branch3 = conv_1d(network, 128, 5, padding='valid', activation='relu', regularizer="L2")
-    network = merge([branch1, branch2, branch3], mode='concat', axis=1)
+    network1 = merge([branch1, branch2, branch3], mode='concat', axis=1)
     print network.shape
-    network = tf.expand_dims(network, 2)
-    network = global_max_pool(network)
-    network = dropout(network, 0.4)
+    network1 = tf.expand_dims(network1, 2)
+    network1 = global_max_pool(network1)
+    network1 = dropout(network1, 0.4)
     print network.shape
     # Building 2nd convolutional network
     branch21 = conv_1d(network, 128, 3, padding='valid', activation='relu', regularizer='L2')
@@ -399,7 +399,7 @@ def do_cnn(x,y):
     network2 = dropout(network2, 0.8)
     #print network2.shape
     #to concat network1 and network2
-    network_concat = merge([network, network2], mode='concat', axis=1)
+    network_concat = merge([network1, network2], mode='concat', axis=1)
     print network_concat.shape
     #network = tf.expand_dims(network_concat, 2)
     #network = global_max_pool(network)
@@ -413,7 +413,7 @@ def do_cnn(x,y):
     model = tflearn.DNN(network, tensorboard_verbose=3)
     #if not os.path.exists(pkl_file):
         # Training
-    model.fit(trainX, trainY, n_epoch=5, shuffle=True, validation_set=0.1, show_metric=True, batch_size=100, run_id="webshell")
+    model.fit(trainX, trainY, n_epoch=1, shuffle=True, validation_set=0.1, show_metric=True, batch_size=100, run_id="webshell")
     #model.save(pkl_file)
     #else:
     #    model.load(pkl_file)
