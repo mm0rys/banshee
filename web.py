@@ -398,7 +398,7 @@ def do_cnn(x,y):
     network2 = global_max_pool(network2)
     network2 = dropout(network2, 0.8)
     #to concat network1 and network2
-    network_concat = merge([network, network2)
+    network_concat = merge([network, network2], mode='concat', axis=1)
     network = fully_connected(network_concat, 2, activation='softmax')
     network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
