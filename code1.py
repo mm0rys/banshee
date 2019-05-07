@@ -320,7 +320,37 @@ def do_metrics(y_test,y_pred):
     print "metrics.f1_score:"
     print metrics.f1_score(y_test,y_pred)
 
+def do_mlp(x,y):
+    #mlp
+    clf = MLPClassifier(solver='lbfgs',
+                        alpha=1e-5,
+                        hidden_layer_sizes=(5, 2),
+                        random_state=1)
 
+    #print clf
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=0)
+    clf.fit(x_train, y_train)
+    y_pred = clf.predict(x_test)
+    print y_train
+    print y_pred
+    print y_test
+    do_metrics(y_test,y_pred)
+
+def do_nb(x,y):
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=0)
+    gnb = GaussianNB()
+    gnb.fit(x_train, y_train)
+    y_pred = gnb.predict(x_test)
+    do_metrics(y_test,y_pred)
+
+def do_svm(x,y):
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=0)
+    clf = svm.SVC()
+    clf.fit(x_train, y_train)
+    y_pred = clf.predict(x_test)
+
+    do_metrics(y_test,y_pred)
+    
 def do_cnn(x,y):
     global max_document_length
     print "CNN and tf"
