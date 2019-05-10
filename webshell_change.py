@@ -388,7 +388,7 @@ def do_cnn(x,y):
     network = global_max_pool(network)
     network = dropout(network, 0.8)
     network = fully_connected(network, 2, activation='softmax')
-    network = regression(network, optimizer='adam', learning_rate=0.0008,
+    network = regression(network, optimizer='adam', learning_rate=0.001,
                          loss='categorical_crossentropy', name='target')
 
     model = tflearn.DNN(network, tensorboard_verbose=3)
@@ -416,42 +416,6 @@ def do_cnn(x,y):
     print 'y_predict:'
     print  y_predict
     #print  y_test
-
-    do_metrics(y_test, y_predict)
-
-
-def do_rnn(x,y):
-    global max_document_length
-    print "RNN"
-    trainX, testX, trainY, testY = train_test_split(x, y, test_size=0.4, random_state=0)
-    y_test=testY
-
-    trainX = pad_sequences(trainX, maxlen=max_document_length, value=0.)
-    testX = pad_sequences(testX, maxlen=max_document_length, value=0.)
-    # Converting labels to binary vectors
-    trainY = to_categorical(trainY, nb_classes=2)
-    testY = to_categorical(testY, nb_classes=2)
-
-    # Network building
-    net = tflearn.input_data([None, max_document_length])
-    net = tflearn.embedding(net, input_dim=10240000, output_dim=128)
-    net = tflearn.lstm(net, 128, dropout=0.8)
-    net = tflearn.fully_connected(net, 2, activation='softmax')
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='categorical_crossentropy')
-
-    # Training
-    model = tflearn.DNN(net, tensorboard_verbose=0)
-    model.fit(trainX, trainY, validation_set=0.1, show_metric=True,
-              batch_size=10,run_id="webshell",n_epoch=5)
-
-    y_predict_list=model.predict(testX)
-    y_predict=[]
-    for i in y_predict_list:
-        if i[0] > 0.5:
-            y_predict.append(0)
-        else:
-            y_predict.append(1)
 
     do_metrics(y_test, y_predict)
 
