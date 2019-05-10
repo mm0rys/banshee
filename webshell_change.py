@@ -446,7 +446,8 @@ if __name__ == '__main__':
 
     x,y=get_features_by_tf()
 
-    do_cnn(x,y)
+    do_mlp(x,y)
+    #do_cnn(x,y)
     #do_rnn(x,y)
 
 
