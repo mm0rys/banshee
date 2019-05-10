@@ -50,10 +50,10 @@ php_bin="/Users/liu.yan/Desktop/code/2book/opt/php/bin/php"
 #php_bin=" /home/fuxi/dev/opt/php/bin/php"
 
 
-pkl_file="webshell-opcode-cnn.pkl"
+pkl_file="webshell-parallel-cnn.pkl"
 
-data_pkl_file="data-webshell-opcode-tf.pkl"
-label_pkl_file="label-webshell-opcode-tf.pkl"
+data_pkl_file="data-webshell-parallel-tf.pkl"
+label_pkl_file="label-webshell-parallel-tf.pkl"
 
 
 #pro
